@@ -20,20 +20,20 @@ function wehomo_enqueue_assets(){
 
 }
 add_action( 'wp_enqueue_scripts', 'wehomo_enqueue_assets', 11 );
-// Thêm trường gallery vào trang tạo và chỉnh sửa bài viết
+// Add field gallery to post
 function custom_gallery_field_meta_box() {
     add_meta_box(
-        'custom_gallery_field', // ID của meta box
-        'Gallery', // Tên hiển thị của meta box
-        'render_custom_gallery_field', // Callback function để hiển thị nội dung của meta box
+        'custom_gallery_field', // metabox ID
+        'Gallery', // metabox display name
+        'render_custom_gallery_field', // Callback function to display gallery field
         'post', // Post type
-        'normal', // Vị trí của meta box: normal, side, advanced
-        'default' // Ưu tiên của meta box: default, high, low
+        'normal', // meta box position: normal, side, advanced
+        'default' // meta box priority: default, high, low
     );
 }
 add_action('add_meta_boxes', 'custom_gallery_field_meta_box');
 
-// Hiển thị trường gallery
+// display gallery fields
 function render_custom_gallery_field($post) {
     $gallery_images = get_post_meta($post->ID, 'custom_gallery_images', true);
     $image_ids = explode(',', $gallery_images);
@@ -91,7 +91,7 @@ function render_custom_gallery_field($post) {
     <?php
 }
 
-// Lưu trường gallery khi bài viết được lưu
+// Save gallery when post is saved
 function save_custom_gallery_field($post_id) {
     if (array_key_exists('custom_gallery_images', $_POST)) {
         update_post_meta(
@@ -103,6 +103,7 @@ function save_custom_gallery_field($post_id) {
 }
 add_action('save_post', 'save_custom_gallery_field');
 
+// Display gallery shortcode callback
 function display_gallery_slider(){
     global $post;
     $gallery_images = get_post_meta($post->ID, 'custom_gallery_images', true);
@@ -124,4 +125,5 @@ function display_gallery_slider(){
         }
     }
 }
+// Add shortcode
 add_shortcode('Wehomo_Gallery', 'display_gallery_slider');
